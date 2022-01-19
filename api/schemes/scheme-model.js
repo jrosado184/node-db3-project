@@ -1,3 +1,5 @@
+const db = require("../../data/db-config");
+
 async function find() {
   // EXERCISE A
   /*
@@ -16,7 +18,13 @@ async function find() {
     2A- When you have a grasp on the query go ahead and build it in Knex.
     Return from this function the resulting dataset.
   */
-  return "foo";
+  const rows = db("schemes as sc")
+    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+    .select("sc.*")
+    .count("st.step_id as number_of_steps")
+    .groupBy("sc.scheme_id")
+    .orderBy("sc.scheme_id");
+  return rows;
 }
 
 async function findById(scheme_id) {
