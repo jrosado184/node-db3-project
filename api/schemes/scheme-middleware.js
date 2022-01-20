@@ -34,7 +34,7 @@ const checkSchemeId = async (req, res, next) => {
     "message": "invalid scheme_name"
   }
 */
-const validateScheme = (req, res, next) => {
+const validateScheme = async (req, res, next) => {
   const { scheme_name } = req.body;
   if (
     !scheme_name ||
@@ -56,7 +56,7 @@ const validateScheme = (req, res, next) => {
     "message": "invalid step"
   }
 */
-const validateStep = (req, res, next) => {
+const validateStep = async (req, res, next) => {
   const { instructions, step_number } = req.body;
   if (
     !instructions ||
