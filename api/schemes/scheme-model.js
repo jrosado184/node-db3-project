@@ -44,6 +44,7 @@ async function findById(scheme_id) {
     2B- When you have a grasp on the query go ahead and build it in Knex
     making it parametric: instead of a literal `1` you should use `scheme_id`.
 
+
     3B- Test in Postman and see that the resulting data does not look like a scheme,
     but more like an array of steps each including scheme information:
 
@@ -94,7 +95,29 @@ async function findById(scheme_id) {
         "steps": []
       }
   */
-  return "fooid";
+  const rows = await db("schemes as sc")
+    .leftJoin("steps as st", "sc.scheme_id", "st.scheme_id")
+    .where("sc.scheme_id", scheme_id)
+    .select("st.*", "sc.scheme_name")
+    .orderBy("st.step_number");
+
+  const newRow = {
+    scheme_id: rows[0].scheme_id,
+    scheme_name: rows[0].scheme_name,
+    steps: [],
+  };
+
+  rows.forEach((row) => {
+    if (row.step_id) {
+      newRow.steps.push({
+        step_id: row.step_id,
+        step_number: row.step_number,
+        instructions: row.instructions,
+      });
+    }
+  });
+
+  return newRow;
 }
 
 async function findSteps(scheme_id) {
