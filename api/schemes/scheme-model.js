@@ -157,6 +157,11 @@ async function add(scheme) {
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
+  return db("schemes")
+    .insert(scheme)
+    .then(([scheme_id]) => {
+      return db("schemes").where("scheme_id", scheme_id).first();
+    });
 }
 
 async function addStep(scheme_id, step) {
